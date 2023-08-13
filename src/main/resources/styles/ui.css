@@ -1,0 +1,18 @@
+/*
+ * Empty Stylesheet file.
+ */
+
+.mainFxmlClass {
+
+}
+
+.text-field{
+    -fx-background-color: rgb(142,142,146);
+    -fx-prompt-text-fill: white;
+    -fx-effect: innershadow( three-pass-box , rgba(0,0,0,.5) , 5 , 0.5 , 0 , 0 );
+    -fx-text-fill: white;
+}
+
+.date-picker{
+    -fx-border: none;
+}
