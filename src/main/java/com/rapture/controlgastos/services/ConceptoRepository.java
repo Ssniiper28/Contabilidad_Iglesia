@@ -154,10 +154,11 @@ public class ConceptoRepository {
                     .setParameter("categoria", Categoria.EGRESOS)
                     .setParameter("fecha1", fechaInicial)
                     .setParameter("fecha2", fechaFinal)
-                    .getSingleResult();
+                    .list().get(0);
             session.close();
             return c;
         } catch (Exception e) {
+            //e.printStackTrace();
             return null;
         }
     }
