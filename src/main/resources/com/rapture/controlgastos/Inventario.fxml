@@ -8,14 +8,12 @@
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
 <?import javafx.scene.control.TextField?>
-<?import javafx.scene.effect.InnerShadow?>
 <?import javafx.scene.layout.FlowPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
-<?import javafx.scene.paint.Color?>
 <?import javafx.scene.text.Font?>
 
-<VBox fx:id="container" alignment="CENTER" spacing="20.0" style="-fx-background-color: rgb(99,99,102);" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.rapture.controlgastos.InventarioController">
+<VBox fx:id="container" alignment="CENTER" spacing="20.0" style="-fx-background-color: rgb(99,99,102);" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.rapture.controlgastos.controllers.InventarioController">
    <children>
       <HBox alignment="CENTER" prefHeight="30.0" prefWidth="847.0" spacing="6.0">
          <children>
@@ -43,7 +41,7 @@
          <children>
             <HBox alignment="BOTTOM_LEFT" spacing="5.0">
                <children>
-                  <VBox prefHeight="66.0" prefWidth="108.0" spacing="10.0">
+                  <VBox maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" spacing="10.0">
                      <children>
                         <Label fx:id="label1" text="Mes" textFill="WHITE">
                            <font>
@@ -60,10 +58,13 @@
                               <Font name="System Bold" size="20.0" />
                            </font>
                         </Label>
-                        <Spinner fx:id="year" prefHeight="26.0" prefWidth="108.0" />
+                        <Spinner fx:id="year" prefHeight="26.0" prefWidth="108.0" styleClass="inventario-input" />
                      </children>
                   </VBox>
-                  <Button mnemonicParsing="false" onAction="#cargarArchivo" text="Cargar" />
+                  <Button mnemonicParsing="false" onAction="#cargarArchivo" text="Cargar">
+                     <HBox.margin>
+                        <Insets bottom="3.0" />
+                     </HBox.margin></Button>
                </children>
             </HBox>
             <HBox alignment="BOTTOM_LEFT" prefWidth="486.0" spacing="5.0">
@@ -75,25 +76,17 @@
                               <Font name="System Bold" size="20.0" />
                            </font>
                         </Label>
-                        <Spinner fx:id="day" prefHeight="26.0" prefWidth="53.0" />
+                        <Spinner fx:id="day" editable="true" prefHeight="26.0" prefWidth="70.0" styleClass="inventario-input" />
                      </children>
                   </VBox>
-                  <VBox prefHeight="68.0" prefWidth="227.0" spacing="10.0">
+                  <VBox fx:id="conceptoVbox" prefHeight="68.0" prefWidth="227.0" spacing="10.0">
                      <children>
-                        <Label text="Concepto" textFill="WHITE">
+                        <Label fx:id="conceptoLabel" text="Concepto" textFill="WHITE">
                            <font>
                               <Font name="System Bold" size="20.0" />
                            </font>
                         </Label>
-                        <TextField fx:id="conceptoInput" maxWidth="1.7976931348623157E308" prefHeight="26.0" prefWidth="214.0" promptText="Apoyo combustible para visita mision" style="-fx-background-color: rgb(142,142,146); -fx-prompt-text-fill: white;">
-                           <effect>
-                              <InnerShadow choke="0.39" height="14.19" radius="5.717499999999999" width="10.68">
-                                 <color>
-                                    <Color opacity="0.7021276950836182" />
-                                 </color>
-                              </InnerShadow>
-                           </effect>
-                        </TextField>
+                        <TextField fx:id="conceptoInput" maxWidth="1.7976931348623157E308" prefHeight="26.0" prefWidth="214.0" promptText="Apoyo combustible para visita mision" styleClass="inventario-input" />
                      </children>
                   </VBox>
                   <VBox prefHeight="66.0" prefWidth="105.0" spacing="10.0">
@@ -103,19 +96,22 @@
                               <Font name="System Bold" size="20.0" />
                            </font>
                         </Label>
-                        <TextField fx:id="cantidadInput" maxWidth="1.7976931348623157E308" prefHeight="26.0" prefWidth="87.0" promptText="\$ 10,000.00" stylesheets="@../../../styles/ui.css" />
+                        <TextField fx:id="cantidadInput" maxWidth="1.7976931348623157E308" prefHeight="26.0" prefWidth="87.0" promptText="\$ 10,000.00" styleClass="inventario-input" />
                      </children>
                   </VBox>
-                  <Button fx:id="agregarBtn" mnemonicParsing="false" onAction="#agregar" prefHeight="26.0" prefWidth="83.0" text="Agregar" />
+                  <Button fx:id="agregarBtn" mnemonicParsing="false" onAction="#agregar" prefHeight="26.0" prefWidth="83.0" text="Agregar">
+                     <HBox.margin>
+                        <Insets bottom="3.0" />
+                     </HBox.margin></Button>
                </children>
             </HBox>
          </children>
       </FlowPane>
       <TableView fx:id="tablaConceptos" editable="true" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" VBox.vgrow="ALWAYS">
          <columns>
-            <TableColumn fx:id="fechaCol" maxWidth="110.0" minWidth="110.0" prefWidth="110.0" style="-fx-alignment: center;" text="FECHA" />
-            <TableColumn fx:id="conceptoCol" maxWidth="1200.0" minWidth="0.0" prefWidth="50.0" text="CONCEPTO" />
-            <TableColumn fx:id="cantidadCol" maxWidth="120.0" minWidth="120.0" prefWidth="120.0" style="-fx-alignment: center-left;" text="CANTIDAD" />
+            <TableColumn fx:id="fechaCol" maxWidth="-1.0" minWidth="110.0" prefWidth="110.0" style="-fx-alignment: center;" text="FECHA" />
+            <TableColumn fx:id="conceptoCol" maxWidth="1.7976931348623157E308" minWidth="600.0" prefWidth="-1.0" text="CONCEPTO" />
+            <TableColumn fx:id="cantidadCol" maxWidth="-1.0" minWidth="120.0" prefWidth="120.0" style="-fx-alignment: center-left;" text="CANTIDAD" />
          </columns>
          <columnResizePolicy>
             <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
@@ -132,16 +128,12 @@
          <VBox.margin>
             <Insets top="-10.0" />
          </VBox.margin>
+         <padding>
+            <Insets bottom="80.0" />
+         </padding>
       </HBox>
    </children>
    <padding>
       <Insets bottom="30.0" left="100.0" right="100.0" top="30.0" />
    </padding>
-   <effect>
-      <InnerShadow height="22.2" radius="16.15" width="44.4">
-         <color>
-            <Color red="0.019999999552965164" green="0.019999999552965164" blue="0.019999999552965164" opacity="0.7902735471725464" />
-         </color>
-      </InnerShadow>
-   </effect>
 </VBox>

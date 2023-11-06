@@ -11,83 +11,105 @@
 <?import javafx.scene.paint.Color?>
 <?import javafx.scene.text.Font?>
 
-<HBox alignment="CENTER" maxWidth="469.0" prefWidth="469.0" spacing="10.0" style="-fx-background-color: #326485; -fx-background-radius: 20;" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.rapture.controlgastos.TarjetaUsuarioController">
+<HBox alignment="CENTER" maxWidth="469.0" prefHeight="302.0" prefWidth="317.0" spacing="10.0" style="-fx-background-color: #326485; -fx-background-radius: 20;" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.rapture.controlgastos.controllers.TarjetaUsuarioController">
    <children>
-      <VBox alignment="CENTER" spacing="20.0">
+      <VBox alignment="CENTER" prefHeight="282.0" prefWidth="473.0">
          <children>
+            <ImageView fx:id="logo" fitHeight="150.0" fitWidth="120.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../../../static/logo.png" />
+               </image>
+            </ImageView>
+            <VBox alignment="CENTER">
+               <children>
+                  <HBox alignment="CENTER" spacing="10.0">
+                     <children>
+                        <Label minHeight="-Infinity" minWidth="-Infinity" text="Iglesia:" textFill="WHITE">
+                           <font>
+                              <Font name="System Bold" size="15.0" />
+                           </font>
+                        </Label>
+                        <Label fx:id="iglesia" text="El Progreso" textFill="WHITE">
+                           <font>
+                              <Font size="16.0" />
+                           </font>
+                        </Label>
+                     </children>
+                  </HBox>
+                  <HBox alignment="CENTER" spacing="10.0">
+                     <children>
+                        <Label minHeight="-Infinity" minWidth="-Infinity" text="Encargado:" textFill="WHITE">
+                           <font>
+                              <Font name="System Bold" size="15.0" />
+                           </font>
+                        </Label>
+                        <Label fx:id="encargado" text="Mauricio Flores" textFill="WHITE">
+                           <font>
+                              <Font size="16.0" />
+                           </font>
+                        </Label>
+                     </children>
+                  </HBox>
+                  <HBox alignment="CENTER" spacing="10.0">
+                     <children>
+                        <Label minHeight="-Infinity" minWidth="-Infinity" text="Tesorero:" textFill="WHITE">
+                           <font>
+                              <Font name="System Bold" size="15.0" />
+                           </font>
+                        </Label>
+                        <Label fx:id="tesorero" text="Paco Espiniza Paz" textFill="WHITE">
+                           <font>
+                              <Font size="16.0" />
+                           </font>
+                        </Label>
+                     </children>
+                  </HBox>
+               </children>
+               <VBox.margin>
+                  <Insets left="10.0" right="10.0" />
+               </VBox.margin>
+            </VBox>
             <HBox spacing="10.0">
                <children>
-                  <ImageView fx:id="logo" fitHeight="150.0" fitWidth="120.0" pickOnBounds="true" preserveRatio="true">
-                     <image>
-                        <Image url="@../../../static/logo.png" />
-                     </image>
-                  </ImageView>
-                  <VBox alignment="CENTER">
-                     <children>
-                        <HBox alignment="CENTER_LEFT" spacing="10.0">
-                           <children>
-                              <Label minHeight="-Infinity" minWidth="-Infinity" prefHeight="30.0" prefWidth="66.0" text="Iglesia:" textFill="WHITE">
-                                 <font>
-                                    <Font name="System Bold" size="20.0" />
-                                 </font>
-                              </Label>
-                              <Label fx:id="iglesia" text="El Progreso" textFill="WHITE">
-                                 <font>
-                                    <Font size="16.0" />
-                                 </font>
-                              </Label>
-                           </children>
-                        </HBox>
-                        <HBox alignment="CENTER_LEFT" spacing="10.0">
-                           <children>
-                              <Label minHeight="-Infinity" minWidth="-Infinity" prefHeight="30.0" prefWidth="105.0" text="Encargado:" textFill="WHITE">
-                                 <font>
-                                    <Font name="System Bold" size="20.0" />
-                                 </font>
-                              </Label>
-                              <Label fx:id="encargado" text="Mauricio Flores" textFill="WHITE">
-                                 <font>
-                                    <Font size="16.0" />
-                                 </font>
-                              </Label>
-                           </children>
-                        </HBox>
-                        <HBox alignment="CENTER_LEFT" spacing="10.0">
-                           <children>
-                              <Label minHeight="-Infinity" minWidth="-Infinity" prefHeight="30.0" prefWidth="90.0" text="Tesorero:" textFill="WHITE">
-                                 <font>
-                                    <Font name="System Bold" size="20.0" />
-                                 </font>
-                              </Label>
-                              <Label fx:id="tesorero" text="Paco Espiniza Paz" textFill="WHITE">
-                                 <font>
-                                    <Font size="16.0" />
-                                 </font>
-                              </Label>
-                           </children>
-                        </HBox>
-                     </children>
-                  </VBox>
+                  <Button mnemonicParsing="false" onAction="#setActivo" prefHeight="27.0" prefWidth="140.0" style="-fx-background-color: #387c24;" text="SELECCIONAR" textFill="WHITE">
+                     <font>
+                        <Font name="System Bold" size="10.0" />
+                     </font>
+                  </Button>
+                  <Button mnemonicParsing="false" onAction="#edit" prefHeight="27.0" prefWidth="140.0" style="-fx-background-color: #d4863f;" text="EDITAR" textFill="WHITE">
+                     <font>
+                        <Font name="System Bold" size="10.0" />
+                     </font>
+                  </Button>
+                  <Button mnemonicParsing="false" onAction="#elim" prefHeight="27.0" prefWidth="140.0" style="-fx-background-color: #bf3735;" text="ELIMINAR" textFill="WHITE">
+                     <padding>
+                        <Insets left="5.0" right="5.0" />
+                     </padding>
+                     <font>
+                        <Font name="System Bold" size="10.0" />
+                     </font>
+                  </Button>
                </children>
-            </HBox>
-            <Button mnemonicParsing="false" onAction="#setActivo" prefHeight="27.0" prefWidth="140.0" style="-fx-background-color: #d4863f;" text="SELECCIONAR" textFill="WHITE">
                <padding>
-                  <Insets bottom="5.0" left="20.0" right="20.0" top="5.0" />
+                  <Insets left="10.0" right="10.0" />
                </padding>
-               <font>
-                  <Font name="System Bold" size="14.0" />
-               </font>
-            </Button>
+               <VBox.margin>
+                  <Insets top="15.0" />
+               </VBox.margin>
+            </HBox>
          </children>
+         <HBox.margin>
+            <Insets />
+         </HBox.margin>
       </VBox>
    </children>
    <padding>
-      <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+      <Insets bottom="1.0" left="1.0" right="1.0" top="1.0" />
    </padding>
    <effect>
-      <DropShadow height="0.0" offsetX="5.0" offsetY="5.0" radius="0.0" width="0.0">
+      <DropShadow height="44.96" offsetX="5.0" offsetY="5.0" radius="22.465" spread="0.28" width="46.9">
          <color>
-            <Color opacity="0.31990882754325867" />
+            <Color red="0.2368421107530594" green="0.2368421107530594" blue="0.2368421107530594" opacity="0.3199999928474426" />
          </color>
       </DropShadow>
    </effect>

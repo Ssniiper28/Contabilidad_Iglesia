@@ -1,6 +1,7 @@
 package com.rapture.controlgastos;
 
-import com.rapture.controlgastos.models.ControlIglesias;
+import com.rapture.controlgastos.controllers.UIController;
+import com.rapture.controlgastos.services.ControlIglesias;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -19,38 +20,37 @@ public class App extends Application {
     public static Stage stage;
     public static UIController ui = null;
 
-    static void maximizar() {
-       stage.setMaximized(!stage.maximizedProperty().get());
-    }
-
-    static void minimizar() {
-        stage.setIconified(true);
-    }
-
-    static void cerrar() {
-        stage.close();
-    }
-
     @Override
     public void start(Stage stage) throws IOException {
         this.stage = stage;
         ControlIglesias ci = new ControlIglesias();
-        ci.cargarUsuarios();
-        scene = new Scene(loadFXML("UI"), 800, 850);
+        scene = new Scene(loadFXML("UI"), 1920, 1080);
         ui.setActivo(ControlIglesias.activo);
         scene.setFill(Color.TRANSPARENT);
         stage.setScene(scene);
         stage.initStyle(StageStyle.TRANSPARENT);
         stage.setMaximized(true);
-        stage.show();
+        stage.show();    
     }
+    
+    
     @Override
     public void stop() throws Exception {
-        InventarioController.inv.guardarArchivo();
-        ControlIglesias.guardarUsuarios();
+        // InventarioController.inv.guardarArchivo();
     }
     
-    
+    public static void maximizar() {
+       stage.setMaximized(!stage.maximizedProperty().get());
+       stage.setResizable(stage.maximizedProperty().get());
+    }
+
+    public static void minimizar() {
+        stage.setIconified(true);
+    }
+
+    public static void cerrar() {
+        stage.close();
+    }
 
     static void setRoot(String fxml) throws IOException {
         scene.setRoot(loadFXML(fxml));

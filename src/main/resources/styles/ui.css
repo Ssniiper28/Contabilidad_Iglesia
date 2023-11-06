@@ -7,12 +7,19 @@
 }
 
 .text-field{
-    -fx-background-color: rgb(142,142,146);
-    -fx-prompt-text-fill: white;
-    -fx-effect: innershadow( three-pass-box , rgba(0,0,0,.5) , 5 , 0.5 , 0 , 0 );
-    -fx-text-fill: white;
+    -fx-background-color:  #fff;
+    -fx-prompt-text-fill: #6f6f6f;
+    -fx-text-fill: #333;
 }
 
 .date-picker{
     -fx-border: none;
+}
+
+.chart-legend {
+    -fx-background-color: #fff
+}
+
+.table-row-cell:last-row .table-cell{
+    -fx-alignment: center-right;
 }

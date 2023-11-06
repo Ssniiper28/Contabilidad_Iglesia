@@ -1,20 +1,54 @@
 package com.rapture.controlgastos.models;
 
+import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.Table;
 import java.time.LocalDate;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 /**
  *
  * @author edgar
  */
+@Entity
+@Table(name = "conceptos")
+@Getter
+@Setter
+@NoArgsConstructor
 public class Concepto {
-    LocalDate fecha;
-    String descripcion;
-    Double cantidad;
+    @Id
+    @GeneratedValue(strategy=GenerationType.IDENTITY)
+    private long id;
+    private LocalDate fecha;
+    private String descripcion;
+    private Double cantidad;
     
-    public Concepto(LocalDate fecha, String descripcion, double cantidad){
+    @Enumerated(EnumType.STRING)
+    private Categoria categoria;
+    
+    @ManyToOne
+    @OnDelete(action = OnDeleteAction.CASCADE)
+    private Iglesia iglesia;
+    
+    public Concepto(String descripcion, double total){
+        this.descripcion = descripcion;
+        this.cantidad = total;
+    }
+    
+    public Concepto(LocalDate fecha, String descripcion, double cantidad,Categoria categoria){
         this.fecha = fecha;
         this.descripcion = descripcion.toUpperCase();
         this.cantidad = cantidad;
+        this.categoria = categoria;
     }
     
     // Constructor que genera un Concepto a partir de un String en formato csv
@@ -24,30 +58,6 @@ public class Concepto {
         this.fecha = LocalDate.of(Integer.parseInt(fecha[0]),Integer.parseInt(fecha[1]), Integer.parseInt(fecha[2]));
         this.descripcion = datos[1];
         this.cantidad = Double.valueOf(datos[2]);
-    }
-
-    public LocalDate getFecha() {
-        return fecha;
-    }
-
-    public void setFecha(LocalDate fecha) {
-        this.fecha = fecha;
-    }
-
-    public String getDescripcion() {
-        return descripcion;
-    }
-
-    public void setDescripcion(String descripcion) {
-        this.descripcion = descripcion;
-    }
-
-    public Double getCantidad() {
-        return cantidad;
-    }
-
-    public void setCantidad(Double cantidad) {
-        this.cantidad = cantidad;
     }
     
     // Convierte el Concepto en un String en formate csv

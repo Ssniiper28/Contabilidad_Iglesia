@@ -1,8 +1,10 @@
 
-package com.rapture.controlgastos;
+package com.rapture.controlgastos.controllers;
 
-import com.rapture.controlgastos.models.ControlIglesias;
+import com.rapture.controlgastos.App;
+import com.rapture.controlgastos.services.ControlIglesias;
 import com.rapture.controlgastos.models.Iglesia;
+import com.rapture.controlgastos.services.IglesiaRepository;
 import java.net.URL;
 import java.util.ResourceBundle;
 import javafx.event.ActionEvent;
@@ -44,6 +46,16 @@ public class TarjetaUsuarioController implements Initializable {
         this.iglesia.setText(iglesia.getLocalidad());
         encargado.setText(iglesia.getResponsable());
         tesorero.setText(iglesia.getTesorero());
+    }
+
+    @FXML
+    private void edit(ActionEvent event) {
+        UIController.controller.editar(objetoIglesia);
+    }
+
+    @FXML
+    private void elim(ActionEvent event) {
+        UIController.controller.eliminar(objetoIglesia);
     }
     
 }

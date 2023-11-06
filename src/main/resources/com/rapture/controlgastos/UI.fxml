@@ -11,14 +11,18 @@
 <?import javafx.scene.shape.SVGPath?>
 <?import javafx.scene.text.Font?>
 
-<BorderPane stylesheets="@../../../styles/ui.css" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.rapture.controlgastos.UIController">
+<BorderPane prefHeight="762.0" prefWidth="986.0" stylesheets="@../../../styles/ui.css" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.rapture.controlgastos.controllers.UIController">
+   <center>
+      <AnchorPane fx:id="container" onMouseEntered="#cerrarOpciones" prefHeight="739.0" prefWidth="686.0" />
+   </center>
    <top>
       <HBox fx:id="menuBar" alignment="CENTER_LEFT" onMouseDragged="#moveWindow" onMousePressed="#setCoord" prefHeight="38.0" spacing="20.0" style="-fx-background-color: rgb(44,44,46);" BorderPane.alignment="CENTER">
          <children>
             <Button mnemonicParsing="false" onAction="#opciones" style="-fx-background-color: #cfcfcf; -fx-background-radius: 999;" textFill="#14589c">
                <graphic>
                   <SVGPath content="M2.5 12a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5zm0-4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5zm0-4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5z" scaleX="1.5" scaleY="1.5" />
-               </graphic></Button>
+               </graphic>
+            </Button>
             <HBox alignment="CENTER" spacing="20.0" HBox.hgrow="SOMETIMES">
                <children>
                   <Label fx:id="iglesiaLabel" alignment="CENTER" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" text="Seleccionar Perfil" textFill="WHITE">
@@ -65,53 +69,82 @@
                </children>
             </HBox>
          </children>
-         <BorderPane.margin>
-            <Insets />
-         </BorderPane.margin>
          <padding>
             <Insets left="15.0" right="15.0" />
          </padding>
       </HBox>
    </top>
    <left>
-      <VBox fx:id="menu" alignment="TOP_CENTER" minHeight="-Infinity" minWidth="-Infinity" spacing="10.0" style="-fx-background-color: rgb(64,64,66);" BorderPane.alignment="CENTER">
+      <VBox fx:id="menu" alignment="TOP_CENTER" minHeight="-Infinity" minWidth="-Infinity" prefHeight="610.0" prefWidth="300.0" spacing="10.0" style="-fx-background-color: rgb(64,64,66);" BorderPane.alignment="CENTER">
          <children>
             <Label text="Egresos" textFill="WHITE">
                <font>
-                  <Font name="System Bold" size="28.0" />
+                  <Font name="System Bold" size="30.0" />
                </font>
+               <VBox.margin>
+                  <Insets top="60.0" />
+               </VBox.margin>
             </Label>
-            <Button layoutX="10.0" layoutY="10.0" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#setEgresos" prefHeight="30.0" prefWidth="100.0" style="-fx-background-color: #646464; -fx-border-color: white; -fx-background-radius: 0; -fx-border-width: 0;" text="Egresos" textFill="WHITE" />
-            <Separator prefHeight="34.0" prefWidth="200.0" />
-            <Label layoutX="66.0" layoutY="20.0" prefHeight="22.0" prefWidth="111.0" text="Ingresos" textFill="WHITE">
+            <Button layoutX="10.0" layoutY="10.0" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#setEgresos" prefHeight="30.0" prefWidth="100.0" style="-fx-background-color: #646464; -fx-border-color: white; -fx-background-radius: 0; -fx-border-width: 0;" text="Egresos" textFill="WHITE">
                <font>
-                  <Font name="System Bold" size="28.0" />
+                  <Font size="15.0" />
+               </font>
+            </Button>
+            <Separator prefHeight="34.0" prefWidth="200.0">
+               <VBox.margin>
+                  <Insets bottom="20.0" top="20.0" />
+               </VBox.margin>
+            </Separator>
+            <Label layoutX="66.0" layoutY="20.0" text="Ingresos" textFill="WHITE">
+               <font>
+                  <Font name="System Bold" size="30.0" />
                </font>
             </Label>
-            <Button maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#setIngresos" prefHeight="30.0" prefWidth="100.0" style="-fx-background-color: #646464; -fx-border-color: white; -fx-border-width: 0; -fx-background-radius: 0;" text="Ofrendas Generales" textFill="WHITE" />
-            <Button layoutX="10.0" layoutY="101.0" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#setOfrendasEspeciales" prefHeight="30.0" prefWidth="100.0" style="-fx-background-color: #646464; -fx-border-color: white; -fx-border-width: 0; -fx-background-radius: 0;" text="Ofrendas Especiales" textFill="WHITE" />
-            <Button layoutX="10.0" layoutY="132.0" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#setDiezmos" prefHeight="30.0" prefWidth="100.0" style="-fx-background-color: #646464; -fx-border-color: white; -fx-border-width: 0; -fx-background-radius: 0;" text="Diezmos" textFill="WHITE" />
-            <Button layoutX="10.0" layoutY="101.0" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#setTalentos" prefHeight="30.0" prefWidth="100.0" style="-fx-background-color: #646464; -fx-border-color: white; -fx-border-width: 0; -fx-background-radius: 0;" text="Talentos" textFill="WHITE" />
-            <Button layoutX="10.0" layoutY="132.0" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#setPrimicias" prefHeight="30.0" prefWidth="100.0" style="-fx-background-color: #646464; -fx-border-color: white; -fx-border-width: 0; -fx-background-radius: 0;" text="Primicias" textFill="WHITE" />
+            <Button maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#setIngresos" prefHeight="30.0" prefWidth="100.0" style="-fx-background-color: #646464; -fx-border-color: white; -fx-border-width: 0; -fx-background-radius: 0;" text="Ofrendas Generales" textFill="WHITE">
+               <font>
+                  <Font size="15.0" />
+               </font>
+            </Button>
+            <Button layoutX="10.0" layoutY="101.0" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#setOfrendasEspeciales" prefHeight="30.0" prefWidth="100.0" style="-fx-background-color: #646464; -fx-border-color: white; -fx-border-width: 0; -fx-background-radius: 0;" text="Ofrendas Especiales" textFill="WHITE">
+               <font>
+                  <Font size="15.0" />
+               </font>
+            </Button>
+            <Button layoutX="10.0" layoutY="132.0" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#setDiezmos" prefHeight="30.0" prefWidth="100.0" style="-fx-background-color: #646464; -fx-border-color: white; -fx-border-width: 0; -fx-background-radius: 0;" text="Diezmos" textFill="WHITE">
+               <font>
+                  <Font size="15.0" />
+               </font>
+            </Button>
+            <Button layoutX="10.0" layoutY="101.0" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#setTalentos" prefHeight="30.0" prefWidth="100.0" style="-fx-background-color: #646464; -fx-border-color: white; -fx-border-width: 0; -fx-background-radius: 0;" text="Talentos" textFill="WHITE">
+               <font>
+                  <Font size="15.0" />
+               </font>
+            </Button>
+            <Button layoutX="10.0" layoutY="132.0" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#setPrimicias" prefHeight="30.0" prefWidth="100.0" style="-fx-background-color: #646464; -fx-border-color: white; -fx-border-width: 0; -fx-background-radius: 0;" text="Primicias" textFill="WHITE">
+               <font>
+                  <Font size="15.0" />
+               </font>
+            </Button>
             <Separator prefHeight="37.0" prefWidth="200.0" />
-            <Label layoutX="75.0" layoutY="156.0" prefHeight="22.0" prefWidth="111.0" text="Reporte" textFill="WHITE">
+            <Label layoutX="75.0" layoutY="156.0" text="Reporte" textFill="WHITE">
                <font>
-                  <Font name="System Bold" size="28.0" />
+                  <Font name="System Bold" size="30.0" />
                </font>
             </Label>
-            <Button layoutX="10.0" layoutY="71.0" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#setPerfil" prefHeight="30.0" prefWidth="100.0" style="-fx-background-color: #646464; -fx-border-color: white; -fx-border-width: 0; -fx-background-radius: 0;" text="Perfil" textFill="WHITE" />
-            <Button layoutX="30.0" layoutY="509.0" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#setReporte" prefHeight="30.0" prefWidth="100.0" style="-fx-background-color: #646464; -fx-border-color: white; -fx-border-width: 0; -fx-background-radius: 0;" text="Resumen Mensual" textFill="WHITE" />
-            <Button layoutX="10.0" layoutY="40.0" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#generarReporte" prefHeight="30.0" prefWidth="100.0" style="-fx-background-color: #646464; -fx-border-color: white; -fx-border-width: 0; -fx-background-radius: 0;" text="Generar Reporte" textFill="WHITE" />
+            <Button layoutX="10.0" layoutY="71.0" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#setPerfil" prefHeight="30.0" prefWidth="100.0" style="-fx-background-color: #646464; -fx-border-color: white; -fx-border-width: 0; -fx-background-radius: 0;" text="Perfil" textFill="WHITE">
+               <font>
+                  <Font size="15.0" />
+               </font>
+            </Button>
+            <Button layoutX="30.0" layoutY="509.0" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#setReporte" prefHeight="30.0" prefWidth="100.0" style="-fx-background-color: #646464; -fx-border-color: white; -fx-border-width: 0; -fx-background-radius: 0;" text="Resumen Mensual" textFill="WHITE">
+               <font>
+                  <Font size="15.0" />
+               </font>
+            </Button>
          </children>
-         <BorderPane.margin>
-            <Insets />
-         </BorderPane.margin>
          <padding>
             <Insets bottom="10.0" left="20.0" right="20.0" top="10.0" />
          </padding>
       </VBox>
    </left>
-   <center>
-      <AnchorPane fx:id="container" onMouseEntered="#cerrarOpciones" BorderPane.alignment="CENTER" />
-   </center>
 </BorderPane>

@@ -2,16 +2,19 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/javafx/FXMLController.java to edit this template
  */
-package com.rapture.controlgastos;
+package com.rapture.controlgastos.controllers;
 
+import com.rapture.controlgastos.models.Categoria;
 import com.rapture.controlgastos.models.Concepto;
-import com.rapture.controlgastos.models.Inventario;
+import com.rapture.controlgastos.services.Inventario;
 import java.net.URL;
 import java.time.LocalDate;
 import java.time.Month;
+import java.util.List;
 import java.util.Locale;
 import java.util.ResourceBundle;
 import javafx.collections.FXCollections;
+import javafx.css.PseudoClass;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -22,6 +25,7 @@ import javafx.scene.control.Spinner;
 import javafx.scene.control.SpinnerValueFactory;
 import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableRow;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
@@ -68,69 +72,106 @@ public class InventarioController implements Initializable {
     public static Inventario inv = new Inventario();
     public static String mes = "";
     public static int anio;
-    public static String nombreArchivo = "db";
+    List dias = List.of("LUNES", "MARTES", "MIERCOLES", "JUEVES", "VIERNES", "SABADO", "DOMINGO");
     
-    public static String categoria = "Egresos";
+    public static Categoria categoria = Categoria.EGRESOS;
     @FXML
     private Label tituloLabel;
     @FXML
     private Label mesLabel;
     @FXML
     private Label anioLabel;
+    @FXML
+    private VBox conceptoVbox;
+    @FXML
+    private Label conceptoLabel;
     
     /**
      * Initializes the controller class.
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        tituloLabel.setText(categoria);
+        tituloLabel.setText(categoria.toString());
         editando = false;
         setSpinners();
         setColumnsValueFactory();
-        mes = month.getValue(); // necesario inizializar para otras funciones
+        mes = month.getValue(); // necesario inicialializar para otras funciones
         anio = year.getValue();
         mesLabel.setText(mes);
         anioLabel.setText(anio + "");
-        nombreArchivo = mes + "-" + anio;
-        inv.cargarArchivo();
-        tablaConceptos.getItems().addAll(inv.getConceptos());
+        cargarInventario();
+        
+        if (categoria == Categoria.OFRENDAS_GENERALES){
+            conceptoVbox.setManaged(false);
+            conceptoVbox.setVisible(false);
+        }
+        
+
+        // formato para el ultimo concepto de la tabla
+        PseudoClass lastRow = PseudoClass.getPseudoClass("last-row");
+        
+        tablaConceptos.setRowFactory(tv -> new TableRow<Concepto>(){
+            @Override
+            public void updateIndex(int index){
+                super.updateIndex(index);
+                pseudoClassStateChanged(lastRow, index >= 0 && index == tablaConceptos.getItems().size() - 1);
+            }
+        });
+        
+    }
+
+    private void cargarInventario() {
+        List<Concepto> conceptos = inv.cargarArchivo(categoria, getLocalDate());
+        double total = Inventario.getTotal(conceptos);
+        tablaConceptos.getItems().clear();
+        tablaConceptos.getItems().addAll(conceptos);
+        
+        if (conceptos.size() == 0 ){
+            return;
+        }
+        tablaConceptos.getItems().add(new Concepto("TOTAL", total));
     }
     
     @FXML
     private void agregar(ActionEvent event) {
+        
         if (editando){
-            int id = tablaConceptos.getItems().indexOf(seleccionado);
-            inv.eliminar(seleccionado);
-            tablaConceptos.getItems().remove(seleccionado);
-            seleccionado.setFecha(getLocalDate());
-            seleccionado.setDescripcion(conceptoInput.getText());
-            seleccionado.setCantidad(Double.valueOf(cantidadInput.getText()));
-            inv.add(seleccionado);
-            tablaConceptos.getItems().add(id, seleccionado);
-            tablaConceptos.refresh();
-            editando = false;
-            agregarBtn.setText("Agregar");
-            tablaConceptos.getSelectionModel().clearSelection();
+            LocalDate fecha = getLocalDate();
+            try{
+                seleccionado.setFecha(fecha);
+                if (categoria != Categoria.OFRENDAS_GENERALES) {
+                    seleccionado.setDescripcion(conceptoInput.getText().toUpperCase());
+                } else {
+                    seleccionado.setDescripcion(String.format("OFRENDA GENERAL %s", dias.get(fecha.getDayOfWeek().getValue() - 1)));
+                }
+                seleccionado.setCantidad(Double.valueOf(cantidadInput.getText()));
+                inv.editar(seleccionado);
+                cargarInventario();
+                editando = false;
+                agregarBtn.setText("Agregar");
+            } catch (Exception e){
+                editando = false;
+                agregarBtn.setText("Agregar");
+            }
+            
         } else {
             try{
                 LocalDate fecha = getLocalDate();
                 String concepto = conceptoInput.getText();
+                if (categoria == Categoria.OFRENDAS_GENERALES){
+                    concepto = String.format("OFRENDA GENERAL %s", dias.get(fecha.getDayOfWeek().getValue() - 1));
+                }
                 double cantidad = Double.valueOf(cantidadInput.getText());
-                Concepto c = new Concepto(fecha, concepto, cantidad);
+                Concepto c = new Concepto(fecha, concepto, cantidad, categoria);
                 inv.add(c);
-                tablaConceptos.getItems().add(c);
+                cargarInventario();
             } catch (NumberFormatException e){
                 System.out.println("faltan campos");
             } 
         }  
         limpiar();
     }
-    
-    private void llenarTabla(){
-        for (Concepto c : inv.getConceptos()){
-            tablaConceptos.getItems().add(c);
-        }
-    }
+   
     
     private void limpiar(){
         conceptoInput.setText("");
@@ -151,7 +192,7 @@ public class InventarioController implements Initializable {
     private void eliminar(ActionEvent event) {
         inv.eliminar(tablaConceptos.getSelectionModel().getSelectedItem());
         tablaConceptos.getItems().remove(tablaConceptos.getSelectionModel().getSelectedItem());
-        tablaConceptos.refresh();
+        cargarInventario();
     }
     
     private void setSpinners(){
@@ -195,17 +236,10 @@ public class InventarioController implements Initializable {
     @FXML
     private void cargarArchivo(ActionEvent event) {
         day.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(1, Month.of(month.getSelectionModel().getSelectedIndex() + 1).length(LocalDate.now().isLeapYear()), LocalDate.now().getDayOfMonth()));
-        nombreArchivo = mes + "-" + anio;
-        inv.guardarArchivo();
-        inv.limpiar();
-        nombreArchivo = month.getValue() + "-" + year.getValue();
-        inv.cargarArchivo();
         tablaConceptos.getItems().clear();
-        tablaConceptos.getItems().addAll(inv.getConceptos());
+        cargarInventario();
         tablaConceptos.refresh();
         mesLabel.setText(month.getValue());
         anioLabel.setText(year.getValue() + "");
-        mes = month.getValue();
-        anio = year.getValue();
     }
 }

@@ -1,5 +1,7 @@
-package com.rapture.controlgastos;
+package com.rapture.controlgastos.controllers;
 
+import com.rapture.controlgastos.App;
+import com.rapture.controlgastos.models.Categoria;
 import com.rapture.controlgastos.models.Iglesia;
 import java.io.IOException;
 import java.net.URL;
@@ -21,6 +23,7 @@ import javafx.util.Duration;
 public class UIController implements Initializable {
     
     private VBox ventana;
+    
     Timeline abrir, close;
     
     @FXML
@@ -35,6 +38,8 @@ public class UIController implements Initializable {
     private Label encargadoLabel;
     @FXML
     private Label tesoreroLabel;
+    
+    public static GestionUsuariosController controller;
     
     Double x, y;
     
@@ -67,16 +72,18 @@ public class UIController implements Initializable {
     @FXML
     private void opciones(ActionEvent event) {
        if (menu.prefWidthProperty().get() == 0.0){
-           abrir.play();
-           InventarioController.inv.guardarArchivo();
-           InventarioController.inv.limpiar();    
+           abrir.play();   
        } else {
            close.play();
        }
     } 
     
     public void cambiarVista(String fxml) throws IOException{
-        ventana = new FXMLLoader(App.class.getResource(fxml + ".fxml")).load();
+        FXMLLoader loader = new FXMLLoader(App.class.getResource(fxml + ".fxml"));
+        ventana = loader.load();
+        if (fxml.equals("GestionUsuarios")){
+            controller = loader.getController();
+        }
         container.setTopAnchor(ventana, 0.0);
         container.setLeftAnchor(ventana, 0.0);
         container.setRightAnchor(ventana, 0.0);
@@ -87,21 +94,18 @@ public class UIController implements Initializable {
 
     @FXML
     private void setIngresos(ActionEvent e) throws IOException{
-        InventarioController.categoria = "Ofrendas Generales";
-        InventarioController.inv.limpiar();
+        InventarioController.categoria = Categoria.OFRENDAS_GENERALES;
         cambiarVista("Inventario");
         close.play();
     }
     
     @FXML
     private void setEgresos(ActionEvent e) throws IOException{
-        InventarioController.categoria = "Egresos";
-        InventarioController.inv.limpiar();
+        InventarioController.categoria = Categoria.EGRESOS;
         cambiarVista("Inventario");
         close.play();
     } 
 
-    @FXML
     private void generarReporte(ActionEvent event) throws IOException {
         cambiarVista("Generar");
         close.play();
@@ -125,6 +129,10 @@ public class UIController implements Initializable {
             iglesiaLabel.setText(iglesia.getLocalidad());
             encargadoLabel.setText(iglesia.getResponsable());
             tesoreroLabel.setText(iglesia.getTesorero());
+        } else {
+            iglesiaLabel.setText("Seleccionar Perfil");
+            encargadoLabel.setText("Sin Definir");
+            tesoreroLabel.setText("Sin Definir");
         }
     }
 
@@ -158,32 +166,28 @@ public class UIController implements Initializable {
 
     @FXML
     private void setOfrendasEspeciales(ActionEvent event) throws IOException {
-        InventarioController.categoria = "Ofrendas Especiales";
-        InventarioController.inv.limpiar();
+        InventarioController.categoria = Categoria.OFRENDAS_ESPECIALES;
         cambiarVista("Inventario");
         close.play();
     }
 
     @FXML
     private void setDiezmos(ActionEvent event) throws IOException {
-        InventarioController.categoria = "Diezmos";
-        InventarioController.inv.limpiar();
+        InventarioController.categoria = Categoria.DIEZMOS;
         cambiarVista("Inventario");
         close.play();
     }
 
     @FXML
     private void setTalentos(ActionEvent event) throws IOException {
-        InventarioController.categoria = "Talentos";
-        InventarioController.inv.limpiar();
+        InventarioController.categoria = Categoria.TALENTOS;
         cambiarVista("Inventario");
         close.play();
     }
 
     @FXML
     private void setPrimicias(ActionEvent event) throws IOException {
-        InventarioController.categoria = "Primicias";
-        InventarioController.inv.limpiar();
+        InventarioController.categoria = Categoria.PRIMICIAS;
         cambiarVista("Inventario");
         close.play();
     }

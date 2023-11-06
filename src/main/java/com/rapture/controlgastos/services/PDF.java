@@ -1,4 +1,4 @@
-package com.rapture.controlgastos.models;
+package com.rapture.controlgastos.services;
 
 import com.itextpdf.io.image.ImageData;
 import com.itextpdf.io.image.ImageDataFactory;
@@ -17,19 +17,22 @@ import com.itextpdf.layout.property.Leading;
 import com.itextpdf.layout.property.Property;
 import com.itextpdf.layout.property.TextAlignment;
 import com.itextpdf.layout.property.VerticalAlignment;
-import com.rapture.controlgastos.InventarioController;
+import com.rapture.controlgastos.controllers.InventarioController;
+import com.rapture.controlgastos.models.Categoria;
+import com.rapture.controlgastos.models.Concepto;
 import java.awt.Desktop;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.time.LocalDate;
-import java.util.ArrayList;
+import java.util.List;
 import java.util.Locale;
 
 public class PDF {
     PdfWriter writer = null;
     PdfDocument pdfDoc = null;
     Document document = null;
+    LocalDate fecha;
     
     public double saldoMesAnterior;
     public double ofrendasGenerales;
@@ -40,20 +43,19 @@ public class PDF {
     public double sumaIngresos;
     public double egresosMes;
     
-    public void createPDF() throws IOException{
-        String nombreArchivo = InventarioController.nombreArchivo;
-        
-        saldoMesAnterior = Inventario.getMesAnterior();
-        ofrendasGenerales = Inventario.getTotal(Inventario.cargarDatos(InventarioController.nombreArchivo, "ofrendas generales"));
-        ofrendasEspeciales = Inventario.getTotal(Inventario.cargarDatos(InventarioController.nombreArchivo, "ofrendas especiales"));
-        talentos = Inventario.getTotal(Inventario.cargarDatos(InventarioController.nombreArchivo, "talentos"));
-        primicias = Inventario.getTotal(Inventario.cargarDatos(InventarioController.nombreArchivo, "primicias"));
-        diezmos = Inventario.getTotal(Inventario.cargarDatos(InventarioController.nombreArchivo, "diezmos"));
+    public void createPDF(LocalDate fecha) throws IOException{           
+        this.fecha = fecha;
+        saldoMesAnterior = ConceptoRepository.getSaldoAnterior(fecha);
+        ofrendasGenerales = Inventario.getTotal(ConceptoRepository.getConceptoByCategoria(fecha, Categoria.OFRENDAS_GENERALES));
+        ofrendasEspeciales = Inventario.getTotal(ConceptoRepository.getConceptoByCategoria(fecha, Categoria.OFRENDAS_ESPECIALES));
+        talentos = Inventario.getTotal(ConceptoRepository.getConceptoByCategoria(fecha, Categoria.TALENTOS));
+        primicias = Inventario.getTotal(ConceptoRepository.getConceptoByCategoria(fecha, Categoria.PRIMICIAS));
+        diezmos = Inventario.getTotal(ConceptoRepository.getConceptoByCategoria(fecha, Categoria.DIEZMOS));
         sumaIngresos = saldoMesAnterior + ofrendasGenerales + ofrendasEspeciales + talentos + primicias + diezmos;    
-        egresosMes = Inventario.getTotal(Inventario.cargarDatos(InventarioController.nombreArchivo, "egresos"));
+        egresosMes = Inventario.getTotal(ConceptoRepository.getConceptoByCategoria(fecha, Categoria.EGRESOS));
         
         try {
-            writer = new PdfWriter(nombreArchivo + ".pdf");
+            writer = new PdfWriter("reporte.pdf");
         } catch (FileNotFoundException ex) {
             
         }
@@ -86,12 +88,8 @@ public class PDF {
         resumenMensual();
         addPie();
         document.close();
-        Desktop.getDesktop().open(new File(nombreArchivo + ".pdf"));
+        Desktop.getDesktop().open(new File("reporte.pdf"));
         
-        InventarioController.categoria = "saldo actual";
-        InventarioController.inv.limpiar();
-        InventarioController.inv.add(new Concepto(LocalDate.now(), "caja", (sumaIngresos - egresosMes)));
-        InventarioController.inv.guardarArchivo();
     }
     
     public void addHeader(){
@@ -160,13 +158,14 @@ public class PDF {
         String titulo;
         String codigo;
         String suma;
+        Categoria categoria;
         if (x == 1){
-            InventarioController.categoria = "Egresos";
+            categoria = Categoria.EGRESOS;
             titulo = "FORMATO ANALITICO DE EGRESOS";
             codigo = "C02-FAE";
             suma = "EGRESOS";
         } else {
-            InventarioController.categoria = "Ofrendas Generales";
+            categoria = Categoria.OFRENDAS_GENERALES;
             titulo = "FORMATO ANALITICO DE INGRESOS";
             codigo = "C01-FAI";
             suma = "INGRESOS";
@@ -184,9 +183,7 @@ public class PDF {
         tablaDatos.addCell(new Cell().add("CANTIDAD").setBold().setTextAlignment(TextAlignment.CENTER));
         
         
-        InventarioController.inv.limpiar();
-        InventarioController.inv.cargarArchivo();
-        ArrayList<Concepto> datos = InventarioController.inv.getConceptos();
+        List<Concepto> datos = ConceptoRepository.getAllConceptos(fecha, categoria);
         
         // Por cada concepto generar 3 celdas con sus valores
         for (Concepto concepto : datos){
@@ -220,7 +217,7 @@ public class PDF {
         
         // Agregar el total
         tablaDatos.addCell(new Cell(1, 2).add("SUMA DE " + suma).setTextAlignment(TextAlignment.RIGHT).setBorder(Border.NO_BORDER));
-        tablaDatos.addCell(new Cell().add(darFormato(InventarioController.inv.getSuma())).setTextAlignment(TextAlignment.CENTER).setBorder(Border.NO_BORDER).setBorderBottom(new SolidBorder(0.5f)));
+        tablaDatos.addCell(new Cell().add(darFormato(Inventario.getTotal(datos))).setTextAlignment(TextAlignment.CENTER).setBorder(Border.NO_BORDER).setBorderBottom(new SolidBorder(0.5f)));
         
         document.add(tablaDatos);
     }
@@ -263,10 +260,7 @@ public class PDF {
         tablaDatos.addCell(new Cell().add("CONCEPTO").setBold().setTextAlignment(TextAlignment.CENTER));
         tablaDatos.addCell(new Cell().add("IMPORTE").setBold().setTextAlignment(TextAlignment.CENTER));
         
-        InventarioController.categoria = "Egresos";
-        InventarioController.inv.limpiar();
-        InventarioController.inv.cargarArchivo();
-        ArrayList<Concepto> datos = InventarioController.inv.getConceptos();
+        List<Concepto> datos = ConceptoRepository.getAllConceptos(fecha, Categoria.EGRESOS);
         
         for (Concepto concepto : datos){
             for (int i = 0; i < 2; i++){
@@ -372,6 +366,6 @@ public class PDF {
     
     
     public static String darFormato(Double cantidad){
-        return String.format(Locale.US,"$ %,.2f", cantidad);
+        return String.format(Locale.US,"$%,.2f", cantidad);
     }
 }
